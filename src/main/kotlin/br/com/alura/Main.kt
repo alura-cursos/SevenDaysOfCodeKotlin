@@ -24,6 +24,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import br.com.alura.extensions.loadImageBitmap
 import br.com.alura.model.Movie
+import br.com.alura.webclient.MovieWebClient
 
 @Composable
 @Preview
@@ -126,6 +127,7 @@ private fun MovieItem(movie: Movie) {
 }
 
 fun main() = application {
+    MovieWebClient().findTop250Movies()
     Window(
         onCloseRequest = ::exitApplication,
         title = "IMDB"
