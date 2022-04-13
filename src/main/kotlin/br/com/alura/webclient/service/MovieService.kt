@@ -8,6 +8,6 @@ import retrofit2.http.GET
 interface MovieService {
 
     @GET(IMDB_API_KEY)
-    fun findTop250Movies(): Call<Top250Data>
+    suspend fun findTop250Movies(): Top250Data
 
 }

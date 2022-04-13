@@ -1,40 +1,28 @@
 package br.com.alura.webclient
 
-import br.com.alura.model.Movie
-import br.com.alura.webclient.model.Top250Data
 import br.com.alura.webclient.model.toMovie
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.flow.flow
 
 class MovieWebClient {
 
     private val service = RetrofitInit().movieService
 
-    fun findTop250Movies(onSuccess: (movies: List<Movie>) -> Unit) {
-        service.findTop250Movies().enqueue(object : Callback<Top250Data?> {
-            override fun onResponse(
-                call: Call<Top250Data?>,
-                response: Response<Top250Data?>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let { data ->
-                        val movies = data.items.map { detail ->
-                            detail.toMovie()
-                        }
-                        onSuccess(movies)
-                    }
-                }
-
-            }
-
-            override fun onFailure(
-                call: Call<Top250Data?>,
-                t: Throwable
-            ) {
-
-            }
-        })
+    fun findTop250Movies() = flow {
+        val result = try {
+            val movies = service.findTop250Movies()
+                .items.map { it.toMovie() }
+            println("movies loaded $movies")
+            Status.Success(movies)
+        } catch (e: Exception) {
+            println("exception loaded")
+            Status.Error(e)
+        }
+        emit(result)
     }
+}
 
+sealed class Status<out R> {
+    data class Success<out T>(val data: T) : Status<T>()
+    data class Error(val exception: Exception) : Status<Nothing>()
+    object Loading : Status<Nothing>()
 }
