@@ -2,7 +2,6 @@ package br.com.alura
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +10,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,32 +31,12 @@ import br.com.alura.webclient.MovieWebClient
 
 @Composable
 @Preview
-fun App() {
+fun App(movies: List<Movie>) {
     MaterialTheme(
         colors = darkColors()
     ) {
         Surface {
             Box(modifier = Modifier.fillMaxSize()) {
-                val movies = listOf(
-                    Movie(
-                        title = "The Shawshank Redemption",
-                        image = "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX128_CR0,3,128,176_AL_.jpg",
-                        rating = 9.2,
-                        year = 1994
-                    ),
-                    Movie(
-                        title = "The Godfather",
-                        image = "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX128_CR0,1,128,176_AL_.jpg",
-                        rating = 9.2,
-                        year = 1972
-                    ),
-                    Movie(
-                        title = "The Dark Knight",
-                        image = "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_UX128_CR0,3,128,176_AL_.jpg",
-                        rating = 9.0,
-                        year = 2008
-                    )
-                )
                 LazyColumn {
                     items(movies) { movie ->
                         MovieItem(
@@ -127,11 +110,17 @@ private fun MovieItem(movie: Movie) {
 }
 
 fun main() = application {
-    MovieWebClient().findTop250Movies()
+    val client = MovieWebClient()
+    var movies: List<Movie> by remember {
+        mutableStateOf(emptyList())
+    }
+    client.findTop250Movies {
+        movies = it
+    }
     Window(
         onCloseRequest = ::exitApplication,
         title = "IMDB"
     ) {
-        App()
+        App(movies)
     }
 }
