@@ -17,6 +17,6 @@ App desktop desenvolvido com o Compose Desktop para exibir os filmes da API do I
 
 Você pode acessar o código fonte a partir da [branch dev](https://github.com/alura-cursos/SevenDaysOfCodeKotlin/tree/dev).
 
-<!-- ## 🎯 Desafio 
+## 🎯 Desafio 
 
-Gostou do projeto e quer fazer o desafio? Faça um registro no #7DaysOfCode Kotlin
+Gostou do projeto e quer fazer o desafio? [Faça um registro no #7DaysOfCode Kotlin](https://7daysofcode.io/matricula/kotlin)
